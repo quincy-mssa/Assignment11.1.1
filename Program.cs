@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using System.Net;
 using System.Reflection;
+using System.Linq;
 
 namespace Framework
 {
@@ -46,15 +47,18 @@ namespace Framework
 
 
             //var authors = CreateFakeData();
-            //foreach(var author in authors)
-            //{
-            //    Console.WriteLine($"{author} wrote ...");
 
-            //    foreach (var book in author.Books)
-            //        Console.WriteLine($"{book}");
+            //db.Auhthors.AddRange(authors);
 
-            //    Console.WriteLine();
-            //}
+            //db.SaveChanges();
+
+            var recentBooks = from b in db.Books where b.YearOfPublication > 1900 select b;
+
+            foreach (var book in recentBooks.Include(b => b.Author))
+            {
+                Console.WriteLine($"{book} is by {book.Author}");
+            }
+
         }
     }
 }
